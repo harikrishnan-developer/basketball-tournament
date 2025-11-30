@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
+<!-- saved from url=(0042)https://basketball-tournament1.vercel.app/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <title>Inter-Department Basketball Tournament Manager</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
@@ -103,17 +103,17 @@
     <div class="title">
       <div class="logo">🏀</div>
       <div>
-        <h1 id="eventTitle" contenteditable="true">Inter-Department Basketball Tournament</h1>
+        <h1 id="eventTitle" contenteditable="true" class="unlocked">Inter-Department Basketball Tournament</h1>
         <div class="meta">
-          <span id="eventDates" contenteditable="true">5th Dec – 13th Dec</span> • 
-          <span id="eventTime" contenteditable="true">3:00 PM – 6:00 PM</span> • 
-          <span id="eventTeams" contenteditable="true">15 Teams</span>
+          <span id="eventDates" contenteditable="true" class="unlocked">5th Dec – 13th Dec</span> • 
+          <span id="eventTime" contenteditable="true" class="unlocked">3:00 PM – 6:00 PM</span> • 
+          <span id="eventTeams" contenteditable="true" class="unlocked">15 Teams</span>
         </div>
       </div>
     </div>
    <div class="pill">
   <button class="btn" onclick="adminLogin()">🔐 Admin Login</button>
-  <span id="adminStatus">VIEW MODE</span>
+  <span id="adminStatus">ADMIN MODE</span>
 </div>
 
   </div>
@@ -130,7 +130,7 @@
           </div>
     <div class="card">
       <h2>📜 Rule Book (Auto‑Saved)</h2>
-      <textarea id="rules" rows="8">5 players on court, substitutes allowed.
+      <textarea id="rules" rows="8" class="unlocked">5 players on court, substitutes allowed.
 4 quarters × 8 minutes.
 5 fouls = player out.
 Referee decision is final.
@@ -144,35 +144,71 @@ Faculty In‑Charge has full authority.</textarea>
   <section class="card">
     <h2>👥 Team Management</h2>
     <div class="sub">Click any cell to edit. Changes are auto‑saved.</div>
-    <table id="teamTable"><thead><tr><th>#</th><th>Team</th><th>Department</th><th>Players</th><th>Action</th></tr></thead><tbody></tbody></table>
+    <table id="teamTable"><thead><tr><th>#</th><th>Team</th><th>Department</th><th>Players</th><th>Action</th></tr></thead><tbody><tr>
+      <td>1</td>
+      <td contenteditable="true" class="unlocked">AI</td>
+      <td contenteditable="true" class="unlocked">Artificial Intelligence</td>
+      <td contenteditable="true" class="unlocked">ABHILASH V, Syed Mudassir, Akshay Bhat, Dhanush PG, Monish, Rishikesh, Adarsh S, Ashwin Kumar, Barath, md Yusha, Nitheesh, MAYANK L</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>2</td>
+      <td contenteditable="true" class="unlocked">CG (CSD)</td>
+      <td contenteditable="true" class="unlocked">Computer Science &amp; Design</td>
+      <td contenteditable="true" class="unlocked">Uzair, Yash, Om Babu, Shashank, Aryan, Vishnu</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>3</td>
+      <td contenteditable="true" class="unlocked">CD (Data Science)</td>
+      <td contenteditable="true" class="unlocked">Data Science</td>
+      <td contenteditable="true" class="unlocked">Manoranjan L, Aditya Deshmukh, Likith J, Yashas Yajath Reddy, Sathwik Shetty</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>4</td>
+      <td contenteditable="true" class="unlocked">CSE</td>
+      <td contenteditable="true" class="unlocked">Computer Science Engineering</td>
+      <td contenteditable="true" class="unlocked">Shrujan S, Kandalam Akhilesh, M S Yeshwanth Reddy, Chiranth L, Peerzada Muhammad Akeel Masoodi, Aryha K S, Chethan V, Akash S, Jagadish P, Maazin</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>5</td>
+      <td contenteditable="true" class="unlocked">AE</td>
+      <td contenteditable="true" class="unlocked">Aeronautical Engineering</td>
+      <td contenteditable="true" class="unlocked">Pranav R L, Sudarshan, Sagar V, Pranith, Neelothpal, Harshith, MD Umar, Abhiram, Mayank, Samarth, Aadithya, Vinay</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>6</td>
+      <td contenteditable="true" class="unlocked">ECE</td>
+      <td contenteditable="true" class="unlocked">Electronics &amp; Communication</td>
+      <td contenteditable="true" class="unlocked">Ashmith J, C Varun, Jatin, Guruprasad, Joshua</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr></tbody></table>
     <h3>➕ Add New Team</h3>
     <div class="row">
-      <input id="teamName" placeholder="Team Name">
-      <input id="teamDept" placeholder="Department">
-      <input id="teamPlayers" placeholder="Players (comma separated)">
-      <button class="btn add" onclick="addTeam()">Add Team</button>
+      <input id="teamName" placeholder="Team Name" class="unlocked">
+      <input id="teamDept" placeholder="Department" class="unlocked">
+      <input id="teamPlayers" placeholder="Players (comma separated)" class="unlocked">
+      <button class="btn add unlocked" onclick="addTeam()">Add Team</button>
     </div>
   </section>
 
   <section class="card">
-    <h2>🗓 Match Scheduling & Winners</h2>
+    <h2>🗓 Match Scheduling &amp; Winners</h2>
     <table id="matchTable"><thead><tr><th>#</th><th>Date</th><th>Time</th><th>Round</th><th>Team A</th><th>Team B</th><th>Winner</th><th>Action</th></tr></thead><tbody></tbody></table>
     <h3>➕ Add Match</h3>
     <div class="row">
-      <input id="matchDate" placeholder="Date">
-      <input id="matchTime" placeholder="Time">
-      <input id="matchRound" placeholder="Round">
-      <select id="teamA"></select>
-      <select id="teamB"></select>
-      <button class="btn add" onclick="addMatch()">Add Match</button>
+      <input id="matchDate" placeholder="Date" class="unlocked">
+      <input id="matchTime" placeholder="Time" class="unlocked">
+      <input id="matchRound" placeholder="Round" class="unlocked">
+      <select id="teamA" class="unlocked"><option>AI</option><option>CG (CSD)</option><option>CD (Data Science)</option><option>CSE</option><option>AE</option><option>ECE</option></select>
+      <select id="teamB" class="unlocked"><option>AI</option><option>CG (CSD)</option><option>CD (Data Science)</option><option>CSE</option><option>AE</option><option>ECE</option></select>
+      <button class="btn add unlocked" onclick="addMatch()">Add Match</button>
     </div>
   </section>
 
   <section class="card">
     <h2>🏆 Final Results</h2>
-    <p><b>Winner:</b> <span contenteditable="true" id="winner">TBD</span></p>
-    <p><b>Runner‑Up:</b> <span contenteditable="true" id="runner">TBD</span></p>
-    <p><b>3rd Place:</b> <span contenteditable="true" id="third">TBD</span></p>
+    <p><b>Winner:</b> <span contenteditable="true" id="winner" class="unlocked">TBD</span></p>
+    <p><b>Runner‑Up:</b> <span contenteditable="true" id="runner" class="unlocked">TBD</span></p>
+    <p><b>3rd Place:</b> <span contenteditable="true" id="third" class="unlocked">TBD</span></p>
   </section>
   <section class="card">
     <h2>⏳ Updates Soon / Not Eligible</h2>
@@ -185,14 +221,59 @@ Faculty In‑Charge has full authority.</textarea>
           <th>Action</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody><tr>
+      <td>1</td>
+      <td contenteditable="true" class="unlocked">EEE</td>
+      <td contenteditable="true" class="unlocked">Not Eligible</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>2</td>
+      <td contenteditable="true" class="unlocked">Mechanical</td>
+      <td contenteditable="true" class="unlocked">No Team</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>3</td>
+      <td contenteditable="true" class="unlocked">ISE</td>
+      <td contenteditable="true" class="unlocked">No Team</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>4</td>
+      <td contenteditable="true" class="unlocked">AS</td>
+      <td contenteditable="true" class="unlocked">No Team</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>5</td>
+      <td contenteditable="true" class="unlocked">CV</td>
+      <td contenteditable="true" class="unlocked">Updates Soon</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>6</td>
+      <td contenteditable="true" class="unlocked">Chemistry Cycle</td>
+      <td contenteditable="true" class="unlocked">Not Eligible- 3 members(Lohith Kumar, Advait Adarsh, Preston)</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>7</td>
+      <td contenteditable="true" class="unlocked">Electro (ACT, VLSI, IIOT)</td>
+      <td contenteditable="true" class="unlocked">Updates Soon</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>8</td>
+      <td contenteditable="true" class="unlocked">Physics Cycle</td>
+      <td contenteditable="true" class="unlocked">Not Eligible- 4 members -(Krrish Nath, Tejo, Mohammed Nabeel Khan, Preetham G)</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr><tr>
+      <td>9</td>
+      <td contenteditable="true" class="unlocked">CHEMICAL</td>
+      <td contenteditable="true" class="unlocked">Not Eligible- 4 members -(aurav Singh, Shivashankar P, Leon Castelino, Bhavesh D Chhabria)</td>
+      <td><button class="btn del unlocked">Delete</button></td>
+    </tr></tbody>
     </table>
 
     <h3>➕ Add / Edit Status</h3>
     <div class="row">
-      <input id="statusDept" placeholder="Department">
-      <input id="statusText" placeholder="Status (Not Eligible / No Team / Updates Soon)">
-      <button class="btn add" onclick="addStatus()">Add Status</button>
+      <input id="statusDept" placeholder="Department" class="unlocked">
+      <input id="statusText" placeholder="Status (Not Eligible / No Team / Updates Soon)" class="unlocked">
+      <button class="btn add unlocked" onclick="addStatus()">Add Status</button>
     </div>
   </section>
 
@@ -200,12 +281,12 @@ Faculty In‑Charge has full authority.</textarea>
   <section class="card">
     <h2>📺 Live Scoreboard Display Mode</h2>
     <div class="row">
-      <select id="sbTeamA"></select>
-      <select id="sbTeamB"></select>
-      <input id="sbScoreA" type="number" placeholder="Team A Score">
-      <input id="sbScoreB" type="number" placeholder="Team B Score">
-      <button class="btn save" onclick="showScoreboard()">Show</button>
-      <button class="btn del" onclick="hideScoreboard()">Hide</button>
+      <select id="sbTeamA" class="unlocked"><option>AI</option><option>CG (CSD)</option><option>CD (Data Science)</option><option>CSE</option><option>AE</option><option>ECE</option></select>
+      <select id="sbTeamB" class="unlocked"><option>AI</option><option>CG (CSD)</option><option>CD (Data Science)</option><option>CSE</option><option>AE</option><option>ECE</option></select>
+      <input id="sbScoreA" type="number" placeholder="Team A Score" class="unlocked">
+      <input id="sbScoreB" type="number" placeholder="Team B Score" class="unlocked">
+      <button class="btn save unlocked" onclick="showScoreboard()">Show</button>
+      <button class="btn del unlocked" onclick="hideScoreboard()">Hide</button>
     </div>
   </section>
 </div>
@@ -218,13 +299,13 @@ Faculty In‑Charge has full authority.</textarea>
       <div class="score-team" id="liveB">Team B</div>
     </div>
     <div class="score-grid">
-      <div class="score-box"><input id="liveScoreA" readonly></div>
+      <div class="score-box"><input id="liveScoreA" readonly="" class="unlocked"></div>
       <div class="score-team">:</div>
-      <div class="score-box"><input id="liveScoreB" readonly></div>
+      <div class="score-box"><input id="liveScoreB" readonly="" class="unlocked"></div>
     </div>
     <div class="score-actions">
       <span class="badge">LIVE</span>
-      <button class="btn" onclick="toggleFullscreen()">Fullscreen</button>
+      <button class="btn unlocked" onclick="toggleFullscreen()">Fullscreen</button>
     </div>
   </div>
 </div>
@@ -586,5 +667,6 @@ lockAll();
 
 </script>
 
-</body>
-</html>
+
+
+</body></html>
