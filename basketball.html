@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inter-Department Basketball Tournament Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root{
+      --bg1:#ffecd2; 
+      --bg2:#fcb69f; 
+      --card1:#22c1c3;
+      --card2:#fdbb2d;
+      --card3:#ff6a88;
+      --muted:#1f2937; 
+      --line:#ffffff70;
+      --accent:#22c55e;
+      --accent2:#f97316;
+      --danger:#ef4444;
+      --warn:#facc15;
+      --purple:#8b5cf6;
+    }
+    *{box-sizing:border-box; font-weight:700;}
+    body{margin:0; font-family:system-ui, Segoe UI, Arial, sans-serif; color:#0f172a; 
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));}
+    header{position:sticky; top:0; z-index:5;
+      background: linear-gradient(90deg, #1fa2ff, #12d8fa, #a6ffcb);
+      border-bottom:2px solid #ffffff60; padding:14px 16px;}
+    header .wrap{max-width:100%; margin:0 auto; display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:space-between}
+    .title{display:flex; gap:10px; align-items:center}
+    .logo{font-size:26px}
+    h1{font-size:20px; margin:0}
+    .meta{font-size:12px; color:var(--muted)}
+    .pill{padding:4px 10px; border-radius:999px; background:#0b2350; border:1px solid #1e40af; color:#bfdbfe; font-size:11px}
+    .container{max-width:100%; margin:0 auto; padding:16px}
+    .grid{display:grid; gap:16px}
+    @media(min-width:900px){.grid-2{grid-template-columns:1fr 1fr}}
+    .card{background: linear-gradient(135deg, var(--card1), var(--card2), var(--card3));
+      border:1px solid #ffffff90; box-shadow:0 18px 40px rgba(0,0,0,.25);
+      border-radius:20px; padding:14px}
+    .card h2{margin:0 0 8px; font-size:16px}
+    .sub{font-size:12px; color:var(--muted)}
+    table{width:100%; border-collapse:collapse; font-size:13px}
+    th,td{padding:8px; border-bottom:1px solid var(--line); text-align:left}
+    th{background: linear-gradient(135deg,#1d4ed8,#38bdf8); color:#ecfeff; position:sticky; top:0}
+    tr:hover td{background: linear-gradient(135deg,#22c55e,#facc15); color:#052e16;}
+    input, textarea, select{width:100%; padding:8px; background:#020617; color:#fff; border:1px solid #334155; border-radius:10px}
+
+    input:hover, textarea:hover, select:hover{background: linear-gradient(135deg,#38bdf8,#a7f3d0); color:#022c22}
+    input:focus, textarea:focus, select:focus{outline:none; background: linear-gradient(135deg,#facc15,#f97316); color:#052e16}
+    textarea{resize:vertical}
+    .row{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{padding:8px 12px; border-radius:999px; border:1px solid #334155; background:#020617; color:#e5e7eb; cursor:pointer}
+    .btn:hover{background: linear-gradient(135deg,#22c55e,#38bdf8); color:#022c22; transform:scale(1.05)}
+    .btn.add{background:linear-gradient(135deg,#1d4ed8,#22c55e); border-color:#1d4ed8}
+    .btn.del{background:linear-gradient(135deg,#7f1d1d,#ef4444); border-color:#7f1d1d}
+    .btn.save{background:linear-gradient(135deg,#0ea5e9,#22c55e); border-color:#0ea5e9}
+    .badge{font-size:11px; padding:3px 8px; border-radius:999px; background:#052e16; border:1px solid #14532d; color:#86efac}
+    .chip{font-size:11px; padding:3px 8px; border-radius:999px; background:#020617; border:1px solid #334155}
+    .right{text-align:right}
+
+    .winner-animate{
+      animation: pulseWin 1.2s ease-in-out infinite;
+      padding:4px 10px; border-radius:12px;
+      background: linear-gradient(135deg,#22c55e,#facc15);
+      color:#052e16; box-shadow:0 0 18px #22c55e;
+    }
+    @keyframes pulseWin{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.08)}
+      100%{transform:scale(1)}
+    }
+
+    .scoreboard{
+      position:fixed; inset:auto 0 0 0; z-index:10;
+      background: linear-gradient(135deg,#0ea5e9,#22c55e,#facc15);
+      color:#022c22; border-top:3px solid #ffffffaa; padding:12px;
+      display:none;
+    }
+    .score-wrap{max-width:100%; margin:0 auto; display:grid; gap:10px}
+    .score-grid{display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:10px}
+    .score-team{font-size:20px; font-weight:900; text-align:center}
+    .score-box{display:flex; gap:8px; justify-content:center}
+    .score-box input{width:70px; text-align:center; font-size:20px}
+    .score-actions{display:flex; gap:8px; justify-content:space-between}
+    .fullscreen{position:fixed; inset:0; border-radius:0}
+
+.locked {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.unlocked {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="title">
+      <div class="logo">🏀</div>
+      <div>
+        <h1 id="eventTitle" contenteditable="true">Inter-Department Basketball Tournament</h1>
+        <div class="meta">
+          <span id="eventDates" contenteditable="true">5th Dec – 13th Dec</span> • 
+          <span id="eventTime" contenteditable="true">3:00 PM – 6:00 PM</span> • 
+          <span id="eventTeams" contenteditable="true">15 Teams</span>
+        </div>
+      </div>
+    </div>
+   <div class="pill">
+  <button class="btn" onclick="adminLogin()">🔐 Admin Login</button>
+  <span id="adminStatus">VIEW MODE</span>
+</div>
+
+  </div>
+</header>
+
+<div class="container">
+  <section class="grid grid-2">
+    <div class="card">
+      <h2>📌 Event Overview</h2>
+      <p><b>Tournament:</b> Full Court Knockout (Boys)</p>
+      <p><b>Faculty In‑Charge:</b> Harikrishnan</p>
+      <p><b>Student Coordinator:</b> Appointed</p>
+      <p><b>Daily Slot:</b> 3:00 PM – 6:00 PM</p>
+          </div>
+    <div class="card">
+      <h2>📜 Rule Book (Auto‑Saved)</h2>
+      <textarea id="rules" rows="8">5 players on court, substitutes allowed.
+4 quarters × 8 minutes.
+5 fouls = player out.
+Referee decision is final.
+No fighting or abusing.
+Only registered college players allowed.
+Faculty In‑Charge has full authority.</textarea>
+      <div class="right"><span class="badge">Edits save instantly</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>👥 Team Management</h2>
+    <div class="sub">Click any cell to edit. Changes are auto‑saved.</div>
+    <table id="teamTable"><thead><tr><th>#</th><th>Team</th><th>Department</th><th>Players</th><th>Action</th></tr></thead><tbody></tbody></table>
+    <h3>➕ Add New Team</h3>
+    <div class="row">
+      <input id="teamName" placeholder="Team Name">
+      <input id="teamDept" placeholder="Department">
+      <input id="teamPlayers" placeholder="Players (comma separated)">
+      <button class="btn add" onclick="addTeam()">Add Team</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🗓 Match Scheduling & Winners</h2>
+    <table id="matchTable"><thead><tr><th>#</th><th>Date</th><th>Time</th><th>Round</th><th>Team A</th><th>Team B</th><th>Winner</th><th>Action</th></tr></thead><tbody></tbody></table>
+    <h3>➕ Add Match</h3>
+    <div class="row">
+      <input id="matchDate" placeholder="Date">
+      <input id="matchTime" placeholder="Time">
+      <input id="matchRound" placeholder="Round">
+      <select id="teamA"></select>
+      <select id="teamB"></select>
+      <button class="btn add" onclick="addMatch()">Add Match</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>🏆 Final Results</h2>
+    <p><b>Winner:</b> <span contenteditable="true" id="winner">TBD</span></p>
+    <p><b>Runner‑Up:</b> <span contenteditable="true" id="runner">TBD</span></p>
+    <p><b>3rd Place:</b> <span contenteditable="true" id="third">TBD</span></p>
+  </section>
+  <section class="card">
+    <h2>⏳ Updates Soon / Not Eligible</h2>
+    <table id="statusTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Department</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h3>➕ Add / Edit Status</h3>
+    <div class="row">
+      <input id="statusDept" placeholder="Department">
+      <input id="statusText" placeholder="Status (Not Eligible / No Team / Updates Soon)">
+      <button class="btn add" onclick="addStatus()">Add Status</button>
+    </div>
+  </section>
+
+
+  <section class="card">
+    <h2>📺 Live Scoreboard Display Mode</h2>
+    <div class="row">
+      <select id="sbTeamA"></select>
+      <select id="sbTeamB"></select>
+      <input id="sbScoreA" type="number" placeholder="Team A Score">
+      <input id="sbScoreB" type="number" placeholder="Team B Score">
+      <button class="btn save" onclick="showScoreboard()">Show</button>
+      <button class="btn del" onclick="hideScoreboard()">Hide</button>
+    </div>
+  </section>
+</div>
+
+<div class="scoreboard" id="scoreboard">
+  <div class="score-wrap">
+    <div class="score-grid">
+      <div class="score-team" id="liveA">Team A</div>
+      <div class="score-team">VS</div>
+      <div class="score-team" id="liveB">Team B</div>
+    </div>
+    <div class="score-grid">
+      <div class="score-box"><input id="liveScoreA" readonly></div>
+      <div class="score-team">:</div>
+      <div class="score-box"><input id="liveScoreB" readonly></div>
+    </div>
+    <div class="score-actions">
+      <span class="badge">LIVE</span>
+      <button class="btn" onclick="toggleFullscreen()">Fullscreen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const eventTitleEl = document.getElementById('eventTitle');
+const eventDatesEl = document.getElementById('eventDates');
+const eventTimeEl  = document.getElementById('eventTime');
+const eventTeamsEl = document.getElementById('eventTeams');
+const rulesEl      = document.getElementById('rules');
+const winnerEl     = document.getElementById('winner');
+const runnerEl     = document.getElementById('runner');
+const thirdEl      = document.getElementById('third');
+
+const teamAToggle  = document.getElementById('teamA');
+const teamBToggle  = document.getElementById('teamB');
+
+const sbTeamA   = document.getElementById('sbTeamA');
+const sbTeamB   = document.getElementById('sbTeamB');
+const sbScoreA  = document.getElementById('sbScoreA');
+const sbScoreB  = document.getElementById('sbScoreB');
+
+const scoreboard = document.getElementById('scoreboard');
+const liveA      = document.getElementById('liveA');
+const liveB      = document.getElementById('liveB');
+const liveScoreA = document.getElementById('liveScoreA');
+const liveScoreB = document.getElementById('liveScoreB');
+
+const store = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+const load  = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } };
+
+// ---------- DATA ----------
+let teams = load('teams', [
+  {name:"AI",dept:"Artificial Intelligence",players:["ABHILASH V","Syed Mudassir","Akshay Bhat","Dhanush PG","Monish","Rishikesh","Adarsh S","Ashwin Kumar","Barath","md Yusha","Nitheesh","MAYANK L"]},
+  {name:"CG (CSD)",dept:"Computer Science & Design",players:["Uzair","Yash","Om Babu","Shashank","Aryan","Vishnu"]},
+  {name:"CD (Data Science)",dept:"Data Science",players:["Manoranjan L","Aditya Deshmukh","Likith J","Yashas Yajath Reddy","Sathwik Shetty"]},
+  {name:"CSE",dept:"Computer Science Engineering",players:["Shrujan S","Kandalam Akhilesh","M S Yeshwanth Reddy","Chiranth L","Peerzada Muhammad Akeel Masoodi","Aryha K S","Chethan V","Akash S","Jagadish P","Maazin"]},
+  {name:"AE",dept:"Aeronautical Engineering",players:["Pranav R L","Sudarshan","Sagar V","Pranith","Neelothpal","Harshith","MD Umar","Abhiram","Mayank","Samarth","Aadithya","Vinay"]},
+  {name:"ECE",dept:"Electronics & Communication",players:["Ashmith J","C Varun","Jatin","Guruprasad","Joshua"]},
+  {name:"CHEMICAL",dept:"Chemical Engineering",players:["Saurav Singh","Shivashankar P","Leon Castelino","Bhavesh D Chhabria"]},
+  {name:"Physics Cycle",dept:"Physics Cycle",players:["Krrish Nath","Tejo","Mohammed Nabeel Khan","Preetham G"]}
+]);
+
+let matches = load('matches', []);
+
+// ---------- PERSIST / RESTORE ----------
+function persist() {
+  store('teams',   teams);
+  store('matches', matches);
+  store('meta', {
+    title:  eventTitleEl.innerText,
+    dates:  eventDatesEl.innerText,
+    time:   eventTimeEl.innerText,
+    teams:  eventTeamsEl.innerText,
+    rules:  rulesEl.value,
+    winner: winnerEl.innerText,
+    runner: runnerEl.innerText,
+    third:  thirdEl.innerText
+  });
+}
+
+function restore() {
+  const m = load('meta', {});
+  if (m.title)  eventTitleEl.innerText = m.title;
+  if (m.dates)  eventDatesEl.innerText = m.dates;
+  if (m.time)   eventTimeEl.innerText  = m.time;
+  if (m.teams)  eventTeamsEl.innerText = m.teams;
+  if (m.rules)  rulesEl.value          = m.rules;
+  if (m.winner) winnerEl.innerText     = m.winner;
+  if (m.runner) runnerEl.innerText     = m.runner;
+  if (m.third)  thirdEl.innerText      = m.third;
+}
+
+// ---------- TEAMS TABLE ----------
+function renderTeams() {
+  const tb = document.querySelector('#teamTable tbody');
+  tb.innerHTML = '';
+
+  teams.forEach((t, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${i + 1}</td>
+      <td contenteditable="true">${t.name}</td>
+      <td contenteditable="true">${t.dept || ''}</td>
+      <td contenteditable="true">${(t.players || []).join(', ')}</td>
+      <td><button class="btn del">Delete</button></td>
+    `;
+    tb.appendChild(row);
+
+    const cells = row.querySelectorAll('td');
+    const nameCell   = cells[1];
+    const deptCell   = cells[2];
+    const playersCell= cells[3];
+    const delBtn     = cells[4].querySelector('button');
+
+    nameCell.addEventListener('input', () => { teams[i].name   = nameCell.innerText.trim();   persist(); refreshTeamDropdowns(); });
+    deptCell.addEventListener('input', () => { teams[i].dept   = deptCell.innerText.trim();   persist(); });
+    playersCell.addEventListener('input', () => {
+      teams[i].players = playersCell.innerText.split(',').map(s => s.trim()).filter(Boolean);
+      persist();
+    });
+    delBtn.addEventListener('click', () => {
+      if (!confirm('Delete this team?')) return;
+      teams.splice(i, 1);
+      persist();
+      renderTeams();
+    });
+  });
+
+  refreshTeamDropdowns();
+}
+
+function addTeam() {
+  const name = teamName.value.trim();
+  const dept = teamDept.value.trim();
+  const players = teamPlayers.value.split(',').map(x => x.trim()).filter(Boolean);
+
+  if (!name || !players.length) {
+    alert('Fill all fields');
+    return;
+  }
+
+  teams.push({ name, dept, players });
+  teamName.value = teamDept.value = teamPlayers.value = '';
+  persist();
+  renderTeams();
+}
+
+// ---------- MATCHES TABLE ----------
+function renderMatches() {
+  const tb = document.querySelector('#matchTable tbody');
+  tb.innerHTML = '';
+
+  matches.forEach((m, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${i + 1}</td>
+      <td contenteditable="true">${m.date  || ''}</td>
+      <td contenteditable="true">${m.time  || ''}</td>
+      <td contenteditable="true">${m.round || ''}</td>
+      <td>${m.teamA || ''}</td>
+      <td>${m.teamB || ''}</td>
+      <td contenteditable="true">${m.winner || 'TBD'}</td>
+      <td><button class="btn del">Delete</button></td>
+    `;
+    tb.appendChild(row);
+
+    const cells = row.querySelectorAll('td');
+    const dateCell   = cells[1];
+    const timeCell   = cells[2];
+    const roundCell  = cells[3];
+    const winnerCell = cells[6];
+    const delBtn     = cells[7].querySelector('button');
+
+    dateCell.addEventListener('input',   () => { matches[i].date   = dateCell.innerText.trim();  persist(); });
+    timeCell.addEventListener('input',   () => { matches[i].time   = timeCell.innerText.trim();  persist(); });
+    roundCell.addEventListener('input',  () => { matches[i].round  = roundCell.innerText.trim(); persist(); });
+    winnerCell.addEventListener('input', () => {
+      matches[i].winner = winnerCell.innerText.trim();
+      persist();
+    });
+
+    delBtn.addEventListener('click', () => {
+      if (!confirm('Delete this match?')) return;
+      matches.splice(i, 1);
+      persist();
+      renderMatches();
+    });
+  });
+}
+
+function addMatch() {
+  const d = matchDate.value.trim();
+  const t = matchTime.value.trim();
+  const r = matchRound.value.trim();
+  const a = teamAToggle.value;
+  const b = teamBToggle.value;
+
+  if (!d || !t || !r || a === b) {
+    alert('Invalid match');
+    return;
+  }
+
+  matches.push({ date: d, time: t, round: r, teamA: a, teamB: b, winner: 'TBD' });
+  matchDate.value = matchTime.value = matchRound.value = '';
+  persist();
+  renderMatches();
+}
+
+// ---------- DROPDOWNS / SCOREBOARD ----------
+function refreshTeamDropdowns() {
+  [teamAToggle, teamBToggle, sbTeamA, sbTeamB].forEach(sel => sel.innerHTML = '');
+
+  teams.forEach(t => {
+    [teamAToggle, teamBToggle, sbTeamA, sbTeamB].forEach(sel => {
+      const o = document.createElement('option');
+      o.text = t.name;
+      sel.add(o);
+    });
+  });
+}
+
+function initScoreboard() {
+  refreshTeamDropdowns();
+}
+
+function showScoreboard() {
+  liveA.innerText = sbTeamA.value;
+  liveB.innerText = sbTeamB.value;
+  liveScoreA.value = sbScoreA.value || 0;
+  liveScoreB.value = sbScoreB.value || 0;
+  scoreboard.style.display = 'block';
+}
+
+function hideScoreboard() {
+  scoreboard.style.display = 'none';
+}
+
+function toggleFullscreen() {
+  scoreboard.classList.toggle('fullscreen');
+}
+
+// ---------- WINNER HIGHLIGHT ----------
+function applyWinnerAnimation() {
+  [winnerEl, runnerEl, thirdEl].forEach(el => el.classList.remove('winner-animate'));
+  if (winnerEl.innerText && winnerEl.innerText !== 'TBD') {
+    winnerEl.classList.add('winner-animate');
+  }
+}
+
+// ---------- META FIELD LISTENERS ----------
+[
+  eventTitleEl,
+  eventDatesEl,
+  eventTimeEl,
+  eventTeamsEl,
+  winnerEl,
+  runnerEl,
+  thirdEl
+].forEach(el => el.addEventListener('input', () => {
+  persist();
+  applyWinnerAnimation();
+}));
+
+rulesEl.addEventListener('input', persist);
+
+// ---------- STATUS (NOT ELIGIBLE / NO TEAM) ----------
+let statuses = load('statuses', [
+  { dept: "EEE",         status: "Not Eligible" },
+  { dept: "Mechanical",  status: "No Team" },
+  { dept: "ISE",         status: "No Team" },
+  { dept: "AS",          status: "No Team" },
+  { dept: "CV",          status: "Updates Soon" },
+  { dept: "C Cycle",     status: "Updates Soon" },
+  { dept: "Electro (ACT, VLSI, IIOT)", status: "Updates Soon" }
+]);
+
+function renderStatuses() {
+  const tb = document.querySelector('#statusTable tbody');
+  if (!tb) return;
+  tb.innerHTML = '';
+
+  statuses.forEach((s, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${i + 1}</td>
+      <td contenteditable="true">${s.dept}</td>
+      <td contenteditable="true">${s.status}</td>
+      <td><button class="btn del">Delete</button></td>
+    `;
+    tb.appendChild(row);
+
+    const cells = row.querySelectorAll('td');
+    const deptCell   = cells[1];
+    const statusCell = cells[2];
+    const delBtn     = cells[3].querySelector('button');
+
+    deptCell.addEventListener('input', () => {
+      statuses[i].dept = deptCell.innerText.trim();
+      store('statuses', statuses);
+    });
+
+    statusCell.addEventListener('input', () => {
+      statuses[i].status = statusCell.innerText.trim();
+      store('statuses', statuses);
+    });
+
+    delBtn.addEventListener('click', () => {
+      if (!confirm('Delete this row?')) return;
+      statuses.splice(i, 1);
+      store('statuses', statuses);
+      renderStatuses();
+    });
+  });
+}
+
+function addStatus() {
+  const d = statusDept.value.trim();
+  const s = statusText.value.trim();
+  if (!d || !s) {
+    alert('Fill both Department and Status');
+    return;
+  }
+  statuses.push({ dept: d, status: s });
+  statusDept.value = statusText.value = '';
+  store('statuses', statuses);
+  renderStatuses();
+}
+
+
+// ---------- INIT ----------
+// ---------- INIT ----------
+restore();
+renderTeams();
+renderMatches();
+renderStatuses();  // <-- add this line
+initScoreboard();
+applyWinnerAnimation();
+window.addEventListener('beforeunload', persist);
+// ================= ADMIN LOCK SYSTEM =================
+
+let isAdmin = false;
+const ADMIN_PASSWORD = "harikrishnan@2025"; // ✅ YOUR PASSWORD
+
+function adminLogin() {
+  const pass = prompt("Enter Admin Password:");
+
+  if (pass === ADMIN_PASSWORD) {
+    isAdmin = true;
+    unlockAll();
+    document.getElementById("adminStatus").innerText = "ADMIN MODE";
+    alert("✅ Admin Access Granted");
+  } else {
+    alert("❌ Wrong Password");
+  }
+}
+
+function lockAll() {
+  document
+    .querySelectorAll("input, textarea, select, button, [contenteditable]")
+    .forEach(el => {
+      if (!el.closest(".pill")) {
+        el.classList.add("locked");
+      }
+    });
+}
+
+function unlockAll() {
+  document
+    .querySelectorAll(".locked")
+    .forEach(el => {
+      el.classList.remove("locked");
+      el.classList.add("unlocked");
+    });
+}
+
+// Lock everything by default
+lockAll();
+
+</script>
+
+</body>
+</html>
